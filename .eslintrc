@@ -18,7 +18,8 @@
      "react-hooks/exhaustive-deps": "warn",
      "arrow-body-style": [0],
      "prefer-arrow-callback": [0],
-     "import/no-extraneous-dependencies": "off"
+     "import/no-extraneous-dependencies": "off",
+     "no-console":[0]
    }
  }
  
