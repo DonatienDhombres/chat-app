@@ -9,6 +9,9 @@ export const ProfileProvider = ({ children }) => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
+    /*  On va chercher le user dans firebase, puis on setProfile(user) 
+        Donc le state profile contient le profile du user             */
+
     let userRef;
 
     const authUnsub = auth.onAuthStateChanged(authObj => {

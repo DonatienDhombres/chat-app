@@ -19,7 +19,10 @@
      "arrow-body-style": [0],
      "prefer-arrow-callback": [0],
      "import/no-extraneous-dependencies": "off",
-     "no-console":[0]
+     "no-console":[0],
+     // Exceptionnellement on va pas bloquer les unused vars
+     "no-unused-vars": "off",
+     "@typescript-eslint/no-unused-vars": "off"
    }
  }
  
