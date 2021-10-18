@@ -3,11 +3,25 @@ import { Alert, Button, Modal } from 'rsuite';
 import AvatarEditor from 'react-avatar-editor';
 import { useModalState } from '../../misc/custom-hooks';
 import { useProfile } from '../../context/profile.context';
+import { database, storage } from '../../misc/firebase';
 
 const fileInputTypes = '.png, .jpeg, .jpg';
 
 const acceptedFileTypes = ['image/png', 'image/jpeg', 'image/pjpeg'];
 const isValidFile = file => acceptedFileTypes.includes(file.type);
+
+const getBlob = canvas => {
+  return new Promise((resolve, reject) => {
+    canvas.toBlob(blob => {
+      /* toBlob comes from Web API : https://developer.mozilla.org/en-US/docs/Web/API/HTMLCanvasElement/toBlob */
+      if (blob) {
+        resolve(blob);
+      } else {
+        reject(new Error('File process error'));
+      }
+    });
+  });
+};
 
 const AvatarUploadBtn = () => {
   const { isOpen, open, close } = useModalState();
@@ -33,7 +47,44 @@ const AvatarUploadBtn = () => {
     }
   };
 
-  const onUploadClick = async () => {};
+  const onUploadClick = async () => {
+    /* AvatarEditor nous donne canvas, blob (car getBlob on l'a créé grâce à canvas.toBlob()) */
+    const canvas = avatarEditorRef.current.getImageScaledToCanvas();
+
+    setIsLoading(true);
+    try {
+      const blob = await getBlob(canvas);
+      /* getBlob is a homemade promise function that enables to get a blob from a canvas */
+
+      const avatarFileRef = storage
+        .ref(`/profile/${profile.uid}`)
+        .child('avatar');
+      /* storage comes from firebase
+      profile comes from Profile context & useProfile */
+
+      const uploadAvatarResult = await avatarFileRef.put(blob, {
+        cacheControl: `public, max-age=${3600 * 24 * 3}`,
+      });
+
+      const downloadUrl = await uploadAvatarResult.ref.getDownloadURL(
+        avatarFileRef
+      );
+      /* getDownloadURL comes from firebase/storage  */
+
+      const userAvatarRef = database
+        .ref(`/profile/${profile.uid}`)
+        .child('avatar');
+
+      userAvatarRef.set(downloadUrl);
+
+      Alert.info('Avatar has been uploaded', 4000);
+
+      setIsLoading(false);
+    } catch (err) {
+      setIsLoading(false);
+      Alert.error(err.message, 4000);
+    }
+  };
 
   return (
     <div className="mt-3 text-center">
