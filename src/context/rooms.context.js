@@ -15,6 +15,7 @@ export const RoomsProvider = ({ children }) => {
       setRooms(data);
     });
     /* ".on" adds a real-time listener */
+    /* Chatroom list has a real time subscription */
 
     return () => {
       roomListRef.off();
@@ -29,3 +30,19 @@ export const RoomsProvider = ({ children }) => {
     La data vient de firebase, et on ne setRooms que lorsque componentDidMount  */
 
 export const useRooms = () => useContext(RoomsContext);
+
+/*
+rooms is an Array of room object :
+const rooms= [{
+  name: "Test"
+  description: "Description"
+  createdAt: 1634819985049
+  id: "-MmXrJts0GGArBym5TTR"
+},
+{
+  name: "Test2"
+  description: "Description2"
+  createdAt: 1634895011760
+  id: "-MmbKWy6V1oOMoEuQPSO"
+}]
+*/
