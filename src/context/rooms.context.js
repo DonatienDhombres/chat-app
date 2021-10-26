@@ -25,4 +25,7 @@ export const RoomsProvider = ({ children }) => {
   );
 };
 
+/*  useRooms fournit le state rooms. 
+    La data vient de firebase, et on ne setRooms que lorsque componentDidMount  */
+
 export const useRooms = () => useContext(RoomsContext);
