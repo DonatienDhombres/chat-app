@@ -8,6 +8,10 @@ export function getNameInitials(name) {
   return splitName[0][0];
 }
 
+export function transformToArr(snapVal) {
+  return snapVal ? Object.keys(snapVal) : [];
+}
+
 /* Transforms a javascript object into an array */
 export function transformToArrWithId(snapVal) {
   return snapVal

@@ -8,6 +8,7 @@ import EditRoomBtnDrawer from './EditRoomBtnDrawer';
 
 const Top = () => {
   const name = useCurrentRoom(value => value.name);
+  const isAdmin = useCurrentRoom(v => v.isAdmin);
   const isMobile = useMediaQuery('(max-width: 992px)');
 
   return (
@@ -28,7 +29,7 @@ const Top = () => {
           <span className="text-disappear">{name}</span>
         </h4>
         <ButtonToolbar className="ws-nowrap">
-          <EditRoomBtnDrawer />
+          {isAdmin && <EditRoomBtnDrawer />}
         </ButtonToolbar>
         {/* white-space:no-wrap */}
       </div>
